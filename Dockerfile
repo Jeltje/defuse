@@ -36,6 +36,11 @@ WORKDIR /data
 # Make sure the defuse script can be found
 # can run defuse.pl or create_reference_dataset.pl or (after run) get_reads.pl
 ENV PATH /opt/defuse/scripts/:$PATH
+ADD ./wrapper.sh /opt/defuse/
+ADD remove.these /opt/defuse/
+
+ENTRYPOINT ["sh", "/opt/defuse/wrapper.sh"]
+CMD ["--help"]
 
 # And clean up
 #RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* 
