@@ -3,9 +3,9 @@
 # Do NOT make any changes to this file to run on the docker container
 #
 
-ensembl_version                             = 83
-ensembl_genome_version                      = GRCh38
-ucsc_genome_version                         = hg38
+ensembl_version                             = 74
+ensembl_genome_version                      = GRCh37
+ucsc_genome_version                         = hg19
 
 # Directory where the defuse code was unpacked
 source_directory                            = /opt/defuse

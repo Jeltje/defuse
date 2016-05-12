@@ -33,18 +33,18 @@ The docker installation is set up to run three deFuse tools:
   - defuse
   - get_reads (post processing)
 
-All three tools need the same config file, which is provided in the repository (`config.txt`).
+All three tools need the same config file, which is provided in the repository (`hg38config.txt`).
 
 ## Creating reference input
 
 First, the reference dataset must be created by using the `reference` option in the container. This will create 109G of data, so
-use a working directory with enough space!
+use a working directory with enough space! The 109G is reduced to 39G before the program finishes.
 
-First, copy `config.txt` to your working directory, then run
+First, copy `hg38config.txt` to your working directory, then run
 
-``docker run -v /path/to/workdir:/data jeltje/defuse reference -c hg38.config.txt``
+``docker run -v /path/to/workdir:/data jeltje/defuse reference -c hg38config.txt``
 
-**This may take up to 24 hours to complete**
+**This may take up to 24 hours to complete**. The program creates a directory named `defuseData/` in your workdir.
 
 ## Running deFuse
 
@@ -52,29 +52,35 @@ The deFuse run *must be*  started from the same working directory as the referen
 
 The fastq input files should be separated into forward and reverse reads, and copied to the working directory.
 
-``docker run -v /path/to/workdir:/data jeltje/defuse defuse -c hg38.config.txt -o outdir -1 R1.fastq -2 R2.fastq -p 8 -l tmpout``
+``docker run -v /path/to/workdir:/data jeltje/defuse defuse -c hg38config.txt -1 R1.fastq -2 R2.fastq -p 8 -o outdir``
 
 where
-
-`outdir` is where all deFuse output will go
 
 `R1.fastq` and `R2.fastq` are the forward and reverse read files
 
 `p 8` is the number of processors allocated to the job
 
-`tmpout` is used for temporary output and can be removed after the run. DeFuse does **not** remove this directory
+`outdir` is where all deFuse output will go
+
+
+**outdir and tmpout will be created by defuse**
 
 ## deFuse output
 
-deFuse creates an ungodly amount of output. We'll get back to you on this.
+DeFuse creates a large number of output files. The most important are the files named `results\*.tsv`, which contain information on the breakpoints found. The `breakpoint.\*` files give more details.
+
+A large number of files is named `clusters.\*`. These contain mappings of reads between chromosomes and are used by the get_reads.pl script, which can be used to retrieve reads that support a breakpoint.
+
+## NOTE: 43G of the 59G output can be deleted
 
 ## Running get_reads
 
-Supporting reads for a given fusion prediction can be obtained using the get_reads.pl script. For a prediction with cluster_id=123 run the following command to obtain the spanning and split reads supporting the fusion.
+Every cluster in `results.tsv` starts with a cluster ID. This ID can be used to retrieve the supporting reads using
+the get_reads.pl script. For a prediction with cluster_id=123 run the following command to obtain the spanning and split reads supporting the fusion.
 
-``docker run -v /path/to/workdir:/data jeltje/defuse get_reads -c hg38.config.txt -o outdir -i 123``
+``docker run -v /path/to/workdir:/data jeltje/defuse get_reads -c hg38config.txt -o outdir -i 123``
 
-This generates output. And we'll describe this output soon, we promise.
+This prints a sequence and information on reads spanning the breakpoint *to STDOUT*
 
 ## References
 
