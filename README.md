@@ -71,13 +71,13 @@ where
 
 The wrapper script inside the docker container also filters the `results.tsv` output using the following criteria:
 
-        # `splitr_count > 1` At least 5 split reads
-        # `span_count >10` at least 10 spanning reads
-        # `orf = Y` fusion preserves an ORF,
-        # `adjacent = N` fusion is not an alternative splice,
-        # `altsplice = N` fusion does not affect adjacent genes,
-        # `min_map_count = 1` at least one read supporting fusion is uniquely mapping
-        # exclude fusions that include mitochondrion and HLA
+ - `splitr_count > 1` At least 5 split reads
+ - `span_count >10` at least 10 spanning reads
+ - `orf = Y` fusion preserves an ORF,
+ - `adjacent = N` fusion is not an alternative splice,
+ - `altsplice = N` fusion does not affect adjacent genes,
+ - `min_map_count = 1` at least one read supporting fusion is uniquely mapping
+ - exclude fusions that include mitochondrion and HLA
 
 See https://bitbucket.org/dranew/defuse for more details on these features.
 
